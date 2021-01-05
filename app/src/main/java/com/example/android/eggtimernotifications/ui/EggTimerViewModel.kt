@@ -128,6 +128,7 @@ class EggTimerViewModel(private val app: Application) : AndroidViewModel(app) {
                     app,
                     NotificationManager::class.java
                 ) as NotificationManager
+
                 notificationManager.cancelNotifications()
 
                 AlarmManagerCompat.setExactAndAllowWhileIdle(

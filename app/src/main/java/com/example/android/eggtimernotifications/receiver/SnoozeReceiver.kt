@@ -47,6 +47,15 @@ class SnoozeReceiver: BroadcastReceiver() {
             triggerTime,
             notifyPendingIntent
         )
+
+        // create a new alarm to send a notification a minute later
+
+        val notificationManager = ContextCompat.getSystemService(
+            context,
+            NotificationManager::class.java
+        ) as NotificationManager
+
+        notificationManager.cancelAll()
     }
 
 }
