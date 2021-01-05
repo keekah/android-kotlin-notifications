@@ -16,10 +16,12 @@
 
 package com.example.android.eggtimernotifications.util
 
+import android.app.Notification
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.core.app.NotificationCompat
 import com.example.android.eggtimernotifications.MainActivity
@@ -41,19 +43,56 @@ fun NotificationManager.sendNotification(messageBody: String, applicationContext
     // Create the content intent for the notification, which launches
     // this activity
     // TODO: Step 1.11 create intent
+    val contentIntent = Intent(applicationContext, MainActivity::class.java)
+
 
     // TODO: Step 1.12 create PendingIntent
+    val contentPendingIntent = PendingIntent.getActivity(
+        applicationContext,
+        NOTIFICATION_ID,
+        contentIntent,
+        PendingIntent.FLAG_UPDATE_CURRENT
+    )
+
 
     // TODO: Step 2.0 add style
+    // The large egg image that will display in the expanded notification
+    val eggImage = BitmapFactory.decodeResource(
+        applicationContext.resources,
+        R.drawable.cooked_egg
+    )
+
+    val bigPicStyle = NotificationCompat.BigPictureStyle()
+        .bigPicture(eggImage)
+        .bigLargeIcon(null)     // large icon goes away when the notification is expanded
 
     // TODO: Step 2.2 add snooze action
 
     // TODO: Step 1.2 get an instance of NotificationCompat.Builder
     // Build the notification
+    val notificationBuilder = NotificationCompat.Builder(
+        applicationContext,
+        applicationContext.getString(R.string.egg_notification_channel_id)
+    )
+
+    // TODO: Step 1.3 set title, text and icon to builder
+    notificationBuilder.setContentTitle(applicationContext.getString(R.string.notification_title))
+        .setContentText(messageBody)
+        .setSmallIcon(R.drawable.cooked_egg)
+        .setDefaults(Notification.DEFAULT_ALL)
+        .setPriority(Notification.PRIORITY_HIGH)
+        .setContentIntent(contentPendingIntent)
+        .setAutoCancel(true)
+        .setStyle(bigPicStyle)
+        .setLargeIcon(eggImage)     // the image will be displayed as a smaller icon on the right when the notification is collapsed
+
+
+    // TODO: Step 1.4 call notify
+    notify(NOTIFICATION_ID, notificationBuilder.build())
 
     // TODO: Step 1.8 use the new 'breakfast' notification channel
 
-    // TODO: Step 1.3 set title, text and icon to builder
+
 
     // TODO: Step 1.13 set content intent
 
@@ -63,8 +102,11 @@ fun NotificationManager.sendNotification(messageBody: String, applicationContext
 
         // TODO: Step 2.5 set priority
 
-    // TODO: Step 1.4 call notify
+
 
 }
 
 // TODO: Step 1.14 Cancel all notifications
+fun NotificationManager.cancelNotifications() {
+    cancelAll()
+}
